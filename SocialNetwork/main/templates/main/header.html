@@ -18,21 +18,31 @@
                 <li class="nav-item">
                   <a class="nav-link" href="/">Home</a>
                 </li>
+               {% if user.is_authenticated %}
                 <li class="nav-item">
                   <a class="nav-link" href="/news">News</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="/login">Login</a>
+                  <a class="nav-link" href="/account">{{ user.username }}</a>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/logout">Logout</a>
+                </li>
+               {% else %}
                 <li class="nav-item">
                   <a class="nav-link" href="/register">Register</a>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/login">Login</a>
+                </li>
+               {% endif %}
               </ul>
               <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
               </form>
             </div>
+
           </nav>
         <div class="container">
             {% block content %}

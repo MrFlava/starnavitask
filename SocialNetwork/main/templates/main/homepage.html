@@ -2,6 +2,13 @@
 
 
 {% block content %}
-  <h1>Hi there</h1>
-  <h1>Cool homepage is coming soon</h1>
+
+  {% if user.is_authenticated %}
+      <h1>Hi there</h1>
+      <h1>Cool newspage is coming soon</h1>
+ {% else %}
+      <h1>Hi there</h1>
+      <h1>Cool homepage is coming soon</h1>
+ {% endif %}
+
 {% endblock %}
