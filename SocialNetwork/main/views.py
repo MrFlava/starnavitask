@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
+from .post_creation_form import PostCreationForm
+from .models import Post
 
 # Create your views here.
 
 
 def homepage(request):
-    return render(request, 'main/homepage.html')
+    return render(request, 'main/homepage.html', context={'posts': Post.objects.all})
 
 
 def register(request):
@@ -42,4 +43,18 @@ def login_request(request):
                 return redirect("main:homepage")
     form = AuthenticationForm()
     return render(request, "main/login.html", {"form": form})
+
+
+def create_a_post(request):
+
+    if request.method == "POST":
+        form = PostCreationForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            return redirect('main:homepage')
+    else:
+        form = PostCreationForm()
+    return render(request, 'main/create_a_post.html', {'form': form})
 

@@ -6,6 +6,14 @@
   {% if user.is_authenticated %}
       <h1>Hi there</h1>
       <h1>Cool newspage is coming soon</h1>
+      {% for post in posts %}
+           <h2>{{post.title}}</h2>
+           <p>Posted by {{post.user}} at {{post.date|date:"d-m-Y"}}</p>
+           <p>{{post.content}}</p>
+           <br>
+           <br>
+      {% endfor %}
+      <a class="btn btn-primary" href="/create_a_post" role="button">Create a post</a>
  {% else %}
       <h1>Hi there</h1>
       <h1>Cool homepage is coming soon</h1>
