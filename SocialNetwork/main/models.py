@@ -10,6 +10,8 @@ class Post(models.Model):
     content = models.TextField()
     date = models.DateTimeField("date published", default=datetime.now())
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    likes = models.IntegerField(default=0)
+    dislikes = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title

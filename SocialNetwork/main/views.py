@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from .post_creation_form import PostCreationForm
@@ -9,6 +9,10 @@ from .models import Post
 
 def homepage(request):
     return render(request, 'main/homepage.html', context={'posts': Post.objects.all})
+
+
+def show_post(request, pk):
+    return render(request, 'main/post.html', context={'posts': Post.objects.get(id=pk)})
 
 
 def register(request):
@@ -58,3 +62,18 @@ def create_a_post(request):
         form = PostCreationForm()
     return render(request, 'main/create_a_post.html', {'form': form})
 
+
+def like_post(request, pk):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, pk=pk)
+        post.likes += 1
+        post.save()
+        return show_post(request, pk)
+
+
+def dislike_post(request, pk):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, pk=pk)
+        post.dislikes += 1
+        post.save()
+        return show_post(request, pk)
