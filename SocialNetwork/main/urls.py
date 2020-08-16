@@ -1,8 +1,7 @@
-from django.urls import path, include
-from django.views.generic import DetailView
+from django.urls import path
 
 from . import views
-from .models import Post
+
 
 app_name = "main"
 

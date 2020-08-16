@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
-from .post_creation_form import PostCreationForm
+
+from .forms import PostCreationForm, CustomUserCreationForm
 from .models import Post
 
 # Create your views here.
@@ -17,16 +19,18 @@ def show_post(request, pk):
 
 def register(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
+            # messages.success(request, 'Account created successfully')
             return redirect("main:homepage")
-        else:
-            for msg in form.error_messages:
-                print(form.error_messages[msg])
+        # else:
+        #     messages.error(request, 'Account created successfully')
+        #     for msg in form.error_messages:
+        #         print(form.error_messages[msg])
 
-    form = UserCreationForm
+    form = CustomUserCreationForm()
     return render(request, "main/register.html", context={"form": form})
 
 
