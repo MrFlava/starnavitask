@@ -17,3 +17,11 @@ class Post(models.Model):
         return self.title
 
     objects = models.Manager()
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    about_yourself = models.TextField()
+    avatar = models.ImageField(upload_to='profile_avatars/')
+
+    objects = models.Manager()

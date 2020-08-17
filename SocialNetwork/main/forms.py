@@ -1,7 +1,8 @@
 from django import forms
-from .models import Post
+from .models import Post, Profile
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core.files.images import get_image_dimensions
 
 
 class PostCreationForm(forms.ModelForm):
@@ -59,3 +60,37 @@ class CustomUserCreationForm(forms.Form):
         if commit:
             new_user.save()
         return new_user
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['about_yourself', 'avatar']
+        labels = {'about_yourself': "Tell about yourself", 'avatar': "Load your avatar"}
+
+    def clean_about_yourself(self):
+        about_yourself = self.cleaned_data['about_yourself']
+
+        return about_yourself
+
+    def clean_avatar(self):
+        avatar = self.cleaned_data['avatar']
+
+        try:
+            w, h = get_image_dimensions(avatar)
+
+            max_width = max_height = 100
+            if w > max_width or h > max_height:
+                raise forms.ValidationError(u'Please use an image that is %s x %s pixels or smaller.' % (max_width, max_height))
+
+            main, sub = avatar.content_type.split('/')
+            if not (main == 'image' and sub in ['jpeg', 'pjpeg', 'gif', 'png']):
+                raise forms.ValidationError(u'Please use a JPEG, GIF or PNG image.')
+
+            if len(avatar) > (20 * 1024):
+                raise forms.ValidationError(u'Avatar file size may not exceed 20k.')
+
+        except AttributeError:
+            print('error')
+
+        return avatar

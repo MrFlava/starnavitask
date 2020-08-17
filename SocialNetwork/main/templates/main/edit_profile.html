@@ -1,0 +1,10 @@
+{% extends "main/header.html" %}
+
+{% block content %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Save changes</button>
+        <a href="/" class="btn btn-primary">Skip</a>
+    </form>
+{% endblock %}

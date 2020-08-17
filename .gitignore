@@ -3,5 +3,6 @@
 .idea/
 .venv/
 __pycache__/
+.media/
 
 **/secret_settings.py
