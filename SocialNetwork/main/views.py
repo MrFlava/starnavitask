@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
+from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import PostCreationForm, CustomUserCreationForm, ProfileForm
-from .models import Post, Profile
+from .models import Post, Profile, Preference
 
 # Create your views here.
 
@@ -31,12 +32,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            # messages.success(request, 'Account created successfully')
             return redirect("main:edit_profile")
-        # else:
-        #     messages.error(request, 'Account created successfully')
-        #     for msg in form.error_messages:
-        #         print(form.error_messages[msg])
 
     form = CustomUserCreationForm()
     return render(request, "main/register.html", context={"form": form})
@@ -109,17 +105,93 @@ def edit_profile_info(request):
     return render(request, 'main/edit_profile.html', {'form': form})
 
 
-def like_post(request, pk):
-    if request.method == 'POST':
-        post = get_object_or_404(Post, pk=pk)
-        post.likes += 1
-        post.save()
-        return show_post(request, pk)
+def postpreference(request, id, val):
+    if request.method == "POST":
+        eachpost = get_object_or_404(Post, pk=id)
 
+        obj = ''
 
-def dislike_post(request, pk):
-    if request.method == 'POST':
-        post = get_object_or_404(Post, pk=pk)
-        post.dislikes += 1
-        post.save()
-        return show_post(request, pk)
+        valueobj = ''
+
+        try:
+            obj = Preference.objects.get(user=request.user, post=eachpost)
+
+            valueobj = obj.value
+
+            valueobj = int(valueobj)
+
+            userpreference = int(val)
+
+            if valueobj != userpreference:
+                obj.delete()
+
+                upref = Preference()
+                upref.user = request.user
+
+                upref.post = eachpost
+
+                upref.value = userpreference
+
+                if userpreference == 1 and valueobj != 1:
+                    eachpost.likes += 1
+                    eachpost.dislikes -= 1
+                elif userpreference == 2 and valueobj != 2:
+                    eachpost.dislikes += 1
+                    eachpost.likes -= 1
+
+                upref.save()
+
+                eachpost.save()
+
+                context = {'eachpost': eachpost,
+                           'postid': id}
+
+                return render(request, 'main/post.html', context)
+
+            elif valueobj == userpreference:
+                obj.delete()
+
+                if userpreference == 1:
+                    eachpost.likes -= 1
+                elif userpreference == 2:
+                    eachpost.dislikes -= 1
+
+                eachpost.save()
+
+                context = {'eachpost': eachpost,
+                           'postid': id}
+
+                return render(request, 'main/post.html', context)
+
+        except ObjectDoesNotExist:
+            upref = Preference()
+
+            upref.user = request.user
+
+            upref.post = eachpost
+
+            upref.value = val
+
+            userpreference = int(val)
+
+            if userpreference == 1:
+                eachpost.likes += 1
+            elif userpreference == 2:
+                eachpost.dislikes += 1
+
+            upref.save()
+
+            eachpost.save()
+
+            context = {'eachpost': eachpost,
+                       'postid': id}
+
+            return render(request, 'main/post.html', context)
+
+    else:
+        eachpost = get_object_or_404(Post, pk=id)
+        context = {'eachpost': eachpost,
+                   'postid': id}
+
+        return render(request, 'main/post.html', context)
+

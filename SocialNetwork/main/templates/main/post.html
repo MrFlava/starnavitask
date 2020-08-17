@@ -6,14 +6,14 @@
      <p>Posted by {{posts.user}} at {{posts.date|date:"d-m-Y"}}</p>
      <p>{{post.content}}</p>
 
-     <a href="#" class="btn btn-primary" onClick="document.getElementById('likebutton').submit()">👍</a> {{posts.likes}}   |
-     <a href="#" class="btn btn-primary" onClick="document.getElementById('dislikebutton').submit()">👎</a> {{posts.dislikes}}
+     <a href="" class="btn btn-primary" onClick="document.getElementById('likebutton').submit()">👍</a> {{posts.likes}}   |
+     <a href="" class="btn btn-primary" onClick="document.getElementById('dislikebutton').submit()">👎</a> {{posts.dislikes}}
 
-     <form id="likebutton" method="POST" action="like">
+     <form id="likebutton" method="POST" action="preference/1/">
          {% csrf_token %}
          <input type="hidden">
      </form>
-     <form id="dislikebutton" method="POST" action="dislike">
+     <form id="dislikebutton" method="POST" action="preference/2/">
          {% csrf_token %}
          <input type="hidden">
      </form>

@@ -16,8 +16,7 @@ urlpatterns = [
     path('profile/', views.show_profile, name='profile'),
     path('create_a_post/', views.create_a_post, name='create_a_post'),
     path('post/<int:pk>/', views.show_post, name=f'post'),
-    path('post/<int:pk>/like', views.like_post, name='like_post'),
-    path('post/<int:pk>/dislike', views.dislike_post, name='dislike_post'),
+    path('post/<int:id>/preference/<int:val>/', views.postpreference, name='postpreference')
 ]
 
 
