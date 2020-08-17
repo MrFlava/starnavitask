@@ -81,7 +81,7 @@ def create_a_post(request):
     return render(request, 'main/create_a_post.html', {'form': form})
 
 
-def edit_profile(request):
+def add_profile_info(request):
 
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES)
@@ -90,6 +90,20 @@ def edit_profile(request):
             profile.user = request.user
             profile.save()
             return redirect('main:homepage')
+    else:
+        form = ProfileForm()
+    return render(request, 'main/edit_profile.html', {'form': form})
+
+
+def edit_profile_info(request):
+
+    if request.method == "POST":
+        user_profile = Profile.objects.get(user=request.user)
+        form = ProfileForm(request.POST, request.FILES, instance= user_profile)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.save()
+            return redirect('main:profile')
     else:
         form = ProfileForm()
     return render(request, 'main/edit_profile.html', {'form': form})
