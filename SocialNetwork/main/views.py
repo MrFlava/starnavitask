@@ -34,7 +34,8 @@ def register(request):
             login(request, user)
             return redirect("main:edit_profile")
 
-    form = CustomUserCreationForm()
+    else:
+        form = CustomUserCreationForm()
     return render(request, "main/register.html", context={"form": form})
 
 
@@ -95,7 +96,7 @@ def edit_profile_info(request):
 
     if request.method == "POST":
         user_profile = Profile.objects.get(user=request.user)
-        form = ProfileForm(request.POST, request.FILES, instance= user_profile)
+        form = ProfileForm(request.POST, request.FILES, instance=user_profile)
         if form.is_valid():
             profile = form.save(commit=False)
             profile.save()
