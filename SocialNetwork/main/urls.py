@@ -1,5 +1,6 @@
 from django.urls import path
 from django.conf import settings
+from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from . import views
 
@@ -7,16 +8,14 @@ from . import views
 app_name = "main"
 
 urlpatterns = [
-    path('', views.homepage, name='homepage'),
-    path('register/', views.register, name='register'),
-    path('logout/', views.logout_request, name='logout'),
-    path('login/', views.login_request, name='login'),
-    path('add_profile_info/', views.add_profile_info, name='add_profile'),
-    path('edit_profile/', views.edit_profile_info, name='edit_profile'),
-    path('profile/', views.show_profile, name='profile'),
-    path('create_a_post/', views.create_a_post, name='create_a_post'),
-    path('post/<int:pk>/', views.show_post, name=f'post'),
-    path('post/<int:id>/preference/<int:val>/', views.postpreference, name='postpreference')
+    path("all-profiles", views.UserProfileListCreateView.as_view(), name="all-profiles"),
+    path("posts", views.PostListCreateView.as_view(), name="add-post"),
+    path("profile/<int:pk>", views.userProfileDetailView.as_view(), name="profile"),
+    path('post/<int:pk>/', views.PostDetailView.as_view(), name=f'post'),
+    path('postpreference', views.PreferenceCreateView.as_view(), name='add-postpreference'),
+    path('postpreference-change/<int:pk>', views.ChangePreferenceView.as_view(), name='change-postpreference'),
+    path('post/likes-analysis', views.likesAnalysisView, name='likes-analysis')
+
 ]
 
 

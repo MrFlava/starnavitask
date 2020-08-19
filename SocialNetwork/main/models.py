@@ -19,10 +19,10 @@ class Post(models.Model):
     objects = models.Manager()
 
 
-class Profile(models.Model):
+class UserActivity(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    about_yourself = models.TextField()
-    avatar = models.ImageField(upload_to='profile_avatars/')
+    last_visit = models.DateTimeField()
+    last_request = models.DateTimeField()
 
     objects = models.Manager()
 
