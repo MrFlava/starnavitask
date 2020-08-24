@@ -21,8 +21,8 @@ class Post(models.Model):
 
 class UserActivity(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    last_visit = models.DateTimeField()
-    last_request = models.DateTimeField()
+    last_visit = models.DateTimeField(default=datetime.now())
+    last_request = models.DateTimeField(default=datetime.now())
 
     objects = models.Manager()
 

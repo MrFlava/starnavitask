@@ -1,32 +1,23 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.db.models import Prefetch
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView)
-from django.contrib.auth.models import User
+from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateDestroyAPIView)
 
 from .permissions import IsOwnerProfileOrReadOnly
 from .serializers import userProfileSerializer, postSerializer, preferenceSerializer
-from .models import Post, Preference
+from .models import Post, Preference, UserActivity
 
 
 # Create your views here.
 
-
-class UserProfileListCreateView(ListCreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = userProfileSerializer
-    permission_classes = [IsAuthenticated]
-
-
 class userProfileDetailView(RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
+    queryset = UserActivity.objects.all()
     serializer_class = userProfileSerializer
     permission_classes = [IsOwnerProfileOrReadOnly, IsAuthenticated]
 
 
 class PostListCreateView(ListCreateAPIView):
+
     queryset = Post.objects.all()
     serializer_class = postSerializer
     permission_classes = [IsAuthenticated]

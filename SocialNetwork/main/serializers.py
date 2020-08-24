@@ -1,14 +1,13 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
 
-from .models import Post, Preference
+from .models import Post, Preference, UserActivity
 
 
 class userProfileSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
-        model = User
+        model = UserActivity
         fields = '__all__'
 
 
