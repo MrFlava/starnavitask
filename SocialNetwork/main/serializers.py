@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import Post, Preference, UserActivity
 
 
-class userProfileSerializer(serializers.ModelSerializer):
+class userActivitySerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
 
     class Meta:

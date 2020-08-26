@@ -4,15 +4,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateDestroyAPIView)
 
 from .permissions import IsOwnerProfileOrReadOnly
-from .serializers import userProfileSerializer, postSerializer, preferenceSerializer
+from .serializers import userActivitySerializer, postSerializer, preferenceSerializer
 from .models import Post, Preference, UserActivity
 
 
 # Create your views here.
 
-class userProfileDetailView(RetrieveUpdateDestroyAPIView):
+class userActivityDetailView(RetrieveUpdateDestroyAPIView):
     queryset = UserActivity.objects.all()
-    serializer_class = userProfileSerializer
+    serializer_class = userActivitySerializer
     permission_classes = [IsOwnerProfileOrReadOnly, IsAuthenticated]
 
 
@@ -29,7 +29,7 @@ class PostListCreateView(ListCreateAPIView):
 
 class PostDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
-    serializer_class = userProfileSerializer
+    serializer_class = postSerializer
     permission_classes = [IsOwnerProfileOrReadOnly, IsAuthenticated]
 
 
